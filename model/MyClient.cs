@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -28,8 +29,10 @@ namespace Game_Kursak_Admin.model
             try
             {
                 networkStream = tcpClient.GetStream();
-                this.Name = GetMsgOrFile();
-                string msg = $"{this.Name} in chat!";
+                string full_msg = GetMsgOrFile();
+                string[] full_msg_mas = full_msg.Split('\t');
+                this.Name = full_msg_mas[0];
+                string msg = $"{full_msg_mas[1]}";
                 _server.msg = msg + Environment.NewLine;
 
                 while (true)
@@ -38,7 +41,8 @@ namespace Game_Kursak_Admin.model
                     {
                         msg = GetMsgOrFile() + " - ";
                         msg = $"{Name} : {msg} {DateTime.Now.ToShortTimeString()}";
-                        _server.msg = msg + Environment.NewLine;
+                        //_server.msg = msg + Environment.NewLine;
+                        _server.msg = msg;
                     }
                     catch (Exception ex)
                     {
