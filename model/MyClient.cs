@@ -18,7 +18,8 @@ namespace Game_Kursak_Admin.model
 
         public MyClient(TcpClient tcpClient, MyServer myServer)
         {
-            Id = Guid.NewGuid().ToString();
+            //Id = Guid.NewGuid().ToString();
+            Id = GetLocalIpAddress().ToString();
             _server = myServer;
             this.tcpClient = tcpClient;
             _server.AddConnection(this);
