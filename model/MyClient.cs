@@ -34,21 +34,17 @@ namespace Game_Kursak_Admin.model
                 string[] full_msg_mas = full_msg.Split('\t');
                 this.Name = full_msg_mas[0];
                 string msg = $"{full_msg_mas[1]}";
-                _server.msg = msg + Environment.NewLine;
+                _server.msg = msg;
 
                 while (true)
                 {
                     try
                     {
-                        msg = GetMsgOrFile() + " - ";
-                        msg = $"{Name} : {msg} {DateTime.Now.ToShortTimeString()}";
-                        //_server.msg = msg + Environment.NewLine;
-                        _server.msg = msg;
+                        msg = GetMsgOrFile();
                     }
                     catch (Exception ex)
                     {
-                        msg = $"{this.Name} OUT OF chat!";
-                        _server.msg = msg + Environment.NewLine;
+                        MessageBox.Show(ex.Message);
                         break;
                     }
                 }
@@ -76,7 +72,7 @@ namespace Game_Kursak_Admin.model
                 builder.Append(Encoding.Unicode.GetString(data, 0, byteCount));
             } while (networkStream.DataAvailable);
             
-            _server.msg = builder.ToString() + Environment.NewLine;
+            //_server.msg = builder.ToString() + Environment.NewLine;
 
             return builder.ToString();
         }

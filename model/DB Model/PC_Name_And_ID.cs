@@ -1,4 +1,4 @@
-namespace Game_Kursak_Admin
+namespace Game_Kursak_Admin.model.DB_Model
 {
     using System;
     using System.Collections.Generic;
@@ -6,19 +6,23 @@ namespace Game_Kursak_Admin
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Med_kit
+    public partial class PC_Name_And_ID
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Med_kit()
+        public PC_Name_And_ID()
         {
+            Bans = new HashSet<Ban>();
             Player_statistics = new HashSet<Player_statistics>();
         }
 
-        public int ID { get; set; }
+        public int Id { get; set; }
 
-        public int Med_kit_picked_up { get; set; }
+        public string Name_PC { get; set; }
 
-        public int HP_replenishment_amount { get; set; }
+        public string Id_PC { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ban> Bans { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Player_statistics> Player_statistics { get; set; }

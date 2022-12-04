@@ -32,16 +32,16 @@
             this.refresh_btn = new System.Windows.Forms.Button();
             this.stop_server_btn = new System.Windows.Forms.Button();
             this.dataGridView_Results = new System.Windows.Forms.DataGridView();
-            this.dataGridView_PC_Id_Name = new System.Windows.Forms.DataGridView();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridView_Bans = new System.Windows.Forms.DataGridView();
             this.button_delete = new System.Windows.Forms.Button();
             this.button_ban = new System.Windows.Forms.Button();
             this.label_online = new System.Windows.Forms.Label();
             this.label_кating_result = new System.Windows.Forms.Label();
             this.label_ban = new System.Windows.Forms.Label();
+            this.dataGridView_PC_Id_Name = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Results)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Bans)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_PC_Id_Name)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // start_server_btn
@@ -82,21 +82,13 @@
             this.dataGridView_Results.Size = new System.Drawing.Size(458, 277);
             this.dataGridView_Results.TabIndex = 5;
             // 
-            // dataGridView_PC_Id_Name
+            // dataGridView_Bans
             // 
-            this.dataGridView_PC_Id_Name.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView_PC_Id_Name.Location = new System.Drawing.Point(12, 86);
-            this.dataGridView_PC_Id_Name.Name = "dataGridView_PC_Id_Name";
-            this.dataGridView_PC_Id_Name.Size = new System.Drawing.Size(262, 277);
-            this.dataGridView_PC_Id_Name.TabIndex = 6;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(776, 86);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(262, 277);
-            this.dataGridView1.TabIndex = 7;
+            this.dataGridView_Bans.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_Bans.Location = new System.Drawing.Point(776, 86);
+            this.dataGridView_Bans.Name = "dataGridView_Bans";
+            this.dataGridView_Bans.Size = new System.Drawing.Size(262, 277);
+            this.dataGridView_Bans.TabIndex = 7;
             // 
             // button_delete
             // 
@@ -116,6 +108,7 @@
             this.button_ban.TabIndex = 9;
             this.button_ban.Text = "Ban";
             this.button_ban.UseVisualStyleBackColor = true;
+            this.button_ban.Click += new System.EventHandler(this.button_ban_Click);
             // 
             // label_online
             // 
@@ -144,6 +137,14 @@
             this.label_ban.TabIndex = 12;
             this.label_ban.Text = "Ban";
             // 
+            // dataGridView_PC_Id_Name
+            // 
+            this.dataGridView_PC_Id_Name.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_PC_Id_Name.Location = new System.Drawing.Point(12, 86);
+            this.dataGridView_PC_Id_Name.Name = "dataGridView_PC_Id_Name";
+            this.dataGridView_PC_Id_Name.Size = new System.Drawing.Size(262, 277);
+            this.dataGridView_PC_Id_Name.TabIndex = 6;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -154,7 +155,7 @@
             this.Controls.Add(this.label_online);
             this.Controls.Add(this.button_ban);
             this.Controls.Add(this.button_delete);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dataGridView_Bans);
             this.Controls.Add(this.dataGridView_PC_Id_Name);
             this.Controls.Add(this.dataGridView_Results);
             this.Controls.Add(this.stop_server_btn);
@@ -163,9 +164,10 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Results)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Bans)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_PC_Id_Name)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,13 +179,13 @@
         private System.Windows.Forms.Button refresh_btn;
         private System.Windows.Forms.Button stop_server_btn;
         private System.Windows.Forms.DataGridView dataGridView_Results;
-        private System.Windows.Forms.DataGridView dataGridView_PC_Id_Name;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridView_Bans;
         private System.Windows.Forms.Button button_delete;
         private System.Windows.Forms.Button button_ban;
         private System.Windows.Forms.Label label_online;
         private System.Windows.Forms.Label label_кating_result;
         private System.Windows.Forms.Label label_ban;
+        private System.Windows.Forms.DataGridView dataGridView_PC_Id_Name;
     }
 }
 

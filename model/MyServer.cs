@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -32,6 +33,11 @@ namespace Game_Kursak_Admin.model
                 {
 
                     TcpClient client = tcpListener.AcceptTcpClient();
+
+                    NetworkStream stream = client.GetStream();
+                    byte[] data = Encoding.UTF8.GetBytes(msg);
+                    stream.Write(data, 0, data.Length);
+
                     MyClient myClient = new MyClient(client, this);
                     Thread clientThread = new Thread(new ThreadStart(myClient.Work));
                     clientThread.Start();

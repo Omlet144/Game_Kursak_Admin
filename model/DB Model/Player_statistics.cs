@@ -1,4 +1,4 @@
-namespace Game_Kursak_Admin
+namespace Game_Kursak_Admin.model.DB_Model
 {
     using System;
     using System.Collections.Generic;

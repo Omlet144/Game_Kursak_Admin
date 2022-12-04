@@ -1,4 +1,5 @@
 ﻿using Game_Kursak_Admin.model;
+using Game_Kursak_Admin.model.DB_Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Game_Kursak_Admin.controller
     {
         MyServer server = new MyServer();
         AdminModel db = new AdminModel();
+        List<Player_statistics_for_client> saveResults = new List<Player_statistics_for_client>();
 
         public void StopServer(Form1 form1, Button btn_stop_server, Button btn_start_server)
         {
@@ -25,11 +27,19 @@ namespace Game_Kursak_Admin.controller
 
         public void StartServer(Form1 form1, Button btn_stop_server, Button btn_start_server)
         {
+            string json;
             btn_stop_server.Enabled = true;
             btn_start_server.Enabled = false;
 
+            foreach (var item in db.Player_statistics)
+            {
+                saveResults.Add(new Player_statistics_for_client(item.PC_Name_And_ID.Name_PC, item.PC_Name_And_ID.Id_PC, item.Nick_name, item.Kills, item.Spent_ammo.Ammo_picked_up, item.Spent_ammo.Fired_bullets, item.Med_kit.Med_kit_picked_up, item.Med_kit.HP_replenishment_amount, item.Game_time));
+            }
+
+            json = JsonConvert.SerializeObject(saveResults, Formatting.Indented);
             try
             {
+                server.msg = json;
                 Thread thread = new Thread(new ThreadStart(server.Listen));
                 thread.Start();
                 form1.BackColor = Color.Green;
@@ -45,39 +55,39 @@ namespace Game_Kursak_Admin.controller
         {
             try
             {
-               
-                //dataGridView_PC_Id_Name.Rows.Clear();
+                bool flag = true;
                 dataGridView_PC_Id_Name.DataSource = server.clients;
                 for (int i = 0; i < dataGridView_PC_Id_Name.RowCount; i++)
                 {
                     dataGridView_PC_Id_Name.Rows[i].ReadOnly = true;
                 }
-                //string json = server.msg;
-                //list_result_client = JsonConvert.DeserializeObject<List<SaveResult>>(json);
-                //dataGridView_Results.DataSource = list_result_client;
                 try
                 {
-                    AddToDB(list_result_client);
+                    foreach (var item in server.clients)
+                    {
+                        foreach (var item2 in db.Bans)
+                        {
+                            if (item2.PC_Name_And_ID.Id_PC == item.Id)
+                            {
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if (flag == true)
+                        {
+                            AddToDB(list_result_client);
+                        }
+                    }
+                    
                 }
                 catch
                 {
                     MessageBox.Show("None new");
                 }
-                dataGridView_Results.DataSource = db.Player_statistics.ToList();
-                for (int i = 0; i < dataGridView_Results.RowCount; i++)
-                {
-                    dataGridView_Results.Rows[i].ReadOnly = true;
-                }
 
             }
             catch (Exception ex)
             {
-
-                dataGridView_PC_Id_Name.DataSource = null;
-                for (int i = 0; i < dataGridView_Results.RowCount; i++)
-                {
-                    dataGridView_Results.Rows[i].ReadOnly = true;
-                }
                 MessageBox.Show(ex.Message);
             }
         }
@@ -102,19 +112,19 @@ namespace Game_Kursak_Admin.controller
                     }
                 }
                 if (id_PC_Name_ID == 0)
-                { 
+                {
                     db.PC_Name_And_ID.Add(new PC_Name_And_ID() { Name_PC = item_clients.Name, Id_PC = item_clients.Id });
                     db.SaveChanges();
                 }
             }
-           
+
             #endregion
             #region add_Spent_ammo
             int ammo_picked_up = 0;
             int fired_bullets = 0;
             int id_Spent_ammo = 0;
-           foreach (var item_spent_ammo_client in list_result_client)
-           {
+            foreach (var item_spent_ammo_client in list_result_client)
+            {
                 ammo_picked_up = item_spent_ammo_client.client_Ammo_picked_up;
                 fired_bullets = item_spent_ammo_client.client_Fired_bullets;
                 foreach (var item in db.Spent_ammo)
@@ -131,8 +141,8 @@ namespace Game_Kursak_Admin.controller
                     db.SaveChanges();
                 }
             }
-            
-            
+
+
             #endregion
             #region add_Med_kit
             int med_kit_picked_up = 0;
@@ -150,15 +160,15 @@ namespace Game_Kursak_Admin.controller
                         break;
                     }
                 }
-                if (id_Med_kit==0) 
+                if (id_Med_kit == 0)
                 {
                     db.Med_kit.Add(new Med_kit() { Med_kit_picked_up = item.client_Med_kit_picked_up, HP_replenishment_amount = item.client_HP_replenishment_amount });
                     db.SaveChanges();
                 }
-                
+
             }
-        
-            
+
+
             #endregion
             #region add_Player_statistics
             foreach (var item in list_result_client)
@@ -175,12 +185,12 @@ namespace Game_Kursak_Admin.controller
                             item2.Med_kit_id = id_Med_kit;
                             item2.Weapon_id = 2;
                             item2.Game_time = item.client_Game_time;
-                           // db.Entry(item2).State = EntityState.Modified;
-                            
+                            // db.Entry(item2).State = EntityState.Modified;
+
                             flag = true;
                             break;
                         }
-                        else 
+                        else
                         {
                             flag = true;
                             break;
@@ -204,8 +214,62 @@ namespace Game_Kursak_Admin.controller
                 }
                 else { break; }
             }
-            
+
             #endregion
         }
+
+        public void DeleteFromDB(string id_str)
+        {
+            try
+            {
+                int id = Convert.ToInt32(id_str);
+                Player_statistics character = db.Player_statistics.Where(x => x.Id == id).FirstOrDefault();
+                db.Player_statistics.Remove(character);
+                db.SaveChanges();
+            }
+            catch { MessageBox.Show("Выберете ячейку с ID которую хотите удалить!"); }
+        }
+
+        public void DeleteFromBan(string id_str)
+        {
+            try
+            {
+                int id = Convert.ToInt32(id_str);
+                Ban character = db.Bans.Where(x => x.Id == id).FirstOrDefault();
+                db.Bans.Remove(character);
+                db.SaveChanges();
+            }
+            catch { MessageBox.Show("Выберете ячейку с ID которую хотите удалить!"); }
+        }
+
+        public void ShowDB(DataGridView dataGridView_Results, DataGridView dataGridView_Ban)
+        {
+            try
+            {
+                dataGridView_Results.DataSource = db.Player_statistics.ToList();
+                dataGridView_Ban.DataSource = db.Bans.ToList();
+            }
+            catch { MessageBox.Show("Cannot Show Table from DB"); }
+        }
+
+        public void AddToBan(DataGridView dataGridView_Ban, string id_str)
+        {
+            try
+            {
+                int id = Convert.ToInt32(id_str);
+                foreach (var item in db.Player_statistics)
+                {
+                    if (item.PC_ID_And_Name_Id == id)
+                    {
+                        db.Bans.Add(new Ban() {PC_ID_And_Name_Id = id});
+                    }
+                }
+                Player_statistics character = db.Player_statistics.Where(x => x.PC_ID_And_Name_Id == id).FirstOrDefault();
+                db.Player_statistics.Remove(character);
+                db.SaveChanges();
+            }
+            catch { MessageBox.Show("Выберете ячейку PC_Name_And_Id с  которую хотите удалить!"); }
+        }
+
     }
 }
