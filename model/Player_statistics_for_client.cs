@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Game_Kursak_Admin.model
+﻿namespace Game_Kursak_Admin.model
 {
     internal class Player_statistics_for_client
     {
