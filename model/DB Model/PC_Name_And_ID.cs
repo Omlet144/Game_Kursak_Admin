@@ -11,7 +11,7 @@ namespace Game_Kursak_Admin.model.DB_Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PC_Name_And_ID()
         {
-            Bans = new HashSet<Ban>();
+            Ban = new HashSet<Ban>();
             Player_statistics = new HashSet<Player_statistics>();
         }
 
@@ -22,7 +22,7 @@ namespace Game_Kursak_Admin.model.DB_Model
         public string Id_PC { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Ban> Bans { get; set; }
+        public virtual ICollection<Ban> Ban { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Player_statistics> Player_statistics { get; set; }

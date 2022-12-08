@@ -43,14 +43,14 @@ namespace Game_Kursak_Admin.controller
             list_result_client = JsonConvert.DeserializeObject<List<Player_statistics_for_client>>(json);
             foreach (var item in list_result_client)
             {
-                foreach (var item2 in db.Bans)
+                foreach (var item2 in db.Ban)
                 {
                     if (item2.PC_Name_And_ID.Id_PC == item.for_Id_PC)
                     {
                         flag_ban = true;
                     }
                 }
-               
+
             }
             if (flag_ban != true)
             {
@@ -71,10 +71,12 @@ namespace Game_Kursak_Admin.controller
                     if (id_PC_Name_ID == 0)
                     {
                         db.PC_Name_And_ID.Add(new PC_Name_And_ID() { Name_PC = item_clients.for_Name_PC, Id_PC = item_clients.for_Id_PC });
-                        db.SaveChanges();
+                        //db.SaveChanges();
                     }
                 }
-
+                if (id_PC_Name_ID == 0)
+                { db.SaveChanges(); }
+                    
                 #endregion
                 #region add_Spent_ammo
                 int ammo_picked_up = 0;
@@ -95,10 +97,11 @@ namespace Game_Kursak_Admin.controller
                     if (id_Spent_ammo == 0)
                     {
                         db.Spent_ammo.Add(new Spent_ammo() { Ammo_picked_up = item_spent_ammo_client.for_client_Ammo_picked_up, Fired_bullets = item_spent_ammo_client.for_client_Fired_bullets });
-                        db.SaveChanges();
+                        //db.SaveChanges();
                     }
                 }
-
+                if (id_Spent_ammo == 0)
+                { db.SaveChanges(); }
 
                 #endregion
                 #region add_Med_kit
@@ -120,11 +123,12 @@ namespace Game_Kursak_Admin.controller
                     if (id_Med_kit == 0)
                     {
                         db.Med_kit.Add(new Med_kit() { Med_kit_picked_up = item.for_client_Med_kit_picked_up, HP_replenishment_amount = item.for_client_HP_replenishment_amount });
-                        db.SaveChanges();
+                        //db.SaveChanges();
                     }
 
                 }
-
+                if (id_Med_kit == 0)
+                { db.SaveChanges(); }
 
                 #endregion
                 #region add_Player_statistics
@@ -143,7 +147,7 @@ namespace Game_Kursak_Admin.controller
                                 item2.Weapon_id = 2;
                                 item2.Game_time = item.for_client_Game_time;
                                 //db.Entry(item2).State = EntityState.Modified;
-                                
+
                                 flag = true;
                                 break;
                             }
@@ -152,10 +156,10 @@ namespace Game_Kursak_Admin.controller
                                 flag = true;
                                 break;
                             }
-                            
+
                         }
                     }
-                    db.SaveChanges();
+                   
                     if (flag != true)
                     {
                         db.Player_statistics.Add(new Player_statistics()
@@ -168,11 +172,12 @@ namespace Game_Kursak_Admin.controller
                             Weapon_id = 2,
                             Game_time = item.for_client_Game_time
                         });
-                        db.SaveChanges();
+                        //db.SaveChanges();
                     }
                     else { break; }
                 }
-
+                if(flag != true)
+                { db.SaveChanges();}
                 #endregion
             }
 
@@ -195,8 +200,8 @@ namespace Game_Kursak_Admin.controller
             try
             {
                 int id = Convert.ToInt32(id_str);
-                Ban character = db.Bans.Where(x => x.Id == id).FirstOrDefault();
-                db.Bans.Remove(character);
+                Ban character = db.Ban.Where(x => x.Id == id).FirstOrDefault();
+                db.Ban.Remove(character);
                 db.SaveChanges();
             }
             catch { MessageBox.Show("Выберете ячейку с ID которую хотите удалить!"); }
@@ -241,7 +246,7 @@ namespace Game_Kursak_Admin.controller
                 dt_Player_Bans.Columns.Add("Name PC", typeof(string));
                 dt_Player_Bans.Columns.Add("IP adress", typeof(string));
 
-                foreach (var item in db.Bans)
+                foreach (var item in db.Ban)
                 {
                     dt_Player_Bans.Rows.Add(item.Id, item.PC_Name_And_ID.Name_PC, item.PC_Name_And_ID.Id_PC);
                 }
@@ -260,7 +265,7 @@ namespace Game_Kursak_Admin.controller
                 {
                     if (item.PC_Name_And_ID.Id_PC == IP_PC)
                     {
-                        db.Bans.Add(new Ban() {PC_ID_And_Name_Id = item.PC_ID_And_Name_Id});
+                        db.Ban.Add(new Ban() {PC_ID_And_Name_Id = item.PC_ID_And_Name_Id});
                         id = (int)item.PC_ID_And_Name_Id;
                     }
                 }
@@ -273,7 +278,7 @@ namespace Game_Kursak_Admin.controller
 
         public void AuthorizationCheck(string login, string password, LoginForm form, FormAdmin formAdmin)
         {
-            foreach (var item in db.Admins)
+            foreach (var item in db.Admin)
             {
                 if (login == item.Login && password == item.Password)
                 {
